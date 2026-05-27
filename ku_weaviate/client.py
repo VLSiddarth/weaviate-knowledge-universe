@@ -278,16 +278,28 @@ class KUWeaviateClient:
             f"(boost scale={boost_params.scale})"
         )
 
-        # Layer 2: KU governance hard-gating
+        # Layer 2: KU governance using stored decay scores
         governance_report: Optional[GovernanceReport] = None
-        if use_governance and urls:
-            governance_report = await self._governor.audit(
-                urls=urls,
+
+        # Build doc list from Weaviate results (decay already stored)
+        all_docs = []
+        for obj in weaviate_hits:
+            all_docs.append({
+                "url": obj.properties.get("url", ""),
+                "platform": obj.properties.get("platform", "unknown"),
+                "decay_score": float(
+                    obj.properties.get("decay_score", 0.4) or 0.4
+                ),
+            })
+
+        if use_governance and all_docs:
+            governance_report = await self._governor.audit_from_weaviate_docs(
+                docs=all_docs,
                 domain_velocity=velocity_label,
             )
             passed_urls = set(governance_report.passed_urls)
         else:
-            passed_urls = set(urls)
+            passed_urls = set(obj.properties.get("url", "") for obj in weaviate_hits)
 
         # Split into passed / blocked
         passed_docs = []
