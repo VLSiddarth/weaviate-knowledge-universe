@@ -40,7 +40,7 @@ Query
 │  near_vector(query_embedding)                        │
 │  + Boost(TimeDecay(                                  │
 │      origin  = now,                                  │
-│      scale   = domain_half_life_from_KU,  ◄── KU    │
+│      scale   = domain_half_life_from_KU,  ◄── KU     │
 │      curve   = EXPONENTIAL,                          │
 │      depth   = 50                                    │
 │    ))                                                │
@@ -54,15 +54,15 @@ Query
 │      LAYER 2: KNOWLEDGE UNIVERSE GOVERNANCE          │
 │                                                      │
 │  For each candidate:                                 │
-│  ┌────────────────────────────────────────────────┐ │
-│  │  decay_score  = f(age_days, platform_half_life)│ │
-│  │  velocity     = domain churn classification    │ │
-│  │  retraction   = CrossRef retraction check      │ │
-│  │                                                │ │
+│  ┌────────────────────────────────────────────────┐  │
+│  │  decay_score  = f(age_days, platform_half_life)│  │
+│  │  velocity     = domain churn classification    │  │
+│  │  retraction   = CrossRef retraction check      │  │
+│  │                                                │  │
 │  │  if decay_score > threshold  → BLOCKED ✗       │ │
-│  │  if retracted               → BLOCKED ✗       │ │
-│  │  else                       → PASSED  ✓       │ │
-│  └────────────────────────────────────────────────┘ │
+│  │  if retracted               → BLOCKED ✗        │ │
+│  │  else                       → PASSED  ✓        │ │
+│  └────────────────────────────────────────────────┘  │
 │                                                      │
 │  Output: audit report + gated candidates             │
 └──────────────────────┬───────────────────────────────┘
